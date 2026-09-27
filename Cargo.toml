@@ -1,0 +1,46 @@
+[package]
+name = "cache-rs"
+version = "0.1.0"
+edition = "2021"
+build = "build.rs"
+
+[dependencies]
+prost = "0.14"
+tokio = { version = "1.53", features = ["full", "tracing"] }
+anyhow = "1.0"
+clap = { version = "4.6", features = ["derive", "env"] }
+async-trait = "0.1"
+chrono = "0.4"
+tracing-subscriber = { version = "0.3", features = ["env-filter"] }
+tracing = "0.1"
+async-tempfile = "0.8"
+tokio-util = "0.7"
+tower-http = { version = "0.7", features = ["limit", "timeout", "trace"] }
+serde_json = "1.0"
+serde = { version = "1.0", features = ["derive"] }
+serde_derive = "1.0"
+thiserror = "2.0"
+tower = { version = "0.5", features = ["load-shed", "limit", "util"] }
+opentelemetry = "0.33"
+opentelemetry_sdk = { version="0.33", features = ["trace", "rt-tokio"] }
+opentelemetry-stdout = { version = "0.33", features = ["trace"] }
+tracing-opentelemetry = "0.34"
+opentelemetry-otlp = { version = "0.33", features = ["http-json", "trace", "reqwest-client"] }
+opentelemetry-http = "0.33"
+futures = "0.3"
+http = "1.5"
+moka = { version = "0.12", features = ["future"] }
+axum = { version = "0.8", features = ["macros", "http2"] }
+axum-server = { version = "0.8", features = ["tls-rustls"] }
+prometheus = "0.14"
+
+
+[[bin]]
+name = "cache-rs"
+path = "src/main.rs"
+
+[profile.release]
+opt-level = 3
+codegen-units = 1
+lto = "thin"
+debug = false
