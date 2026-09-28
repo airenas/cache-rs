@@ -36,6 +36,10 @@ struct Args {
     /// Max items for cache
     #[arg(long, env = "CACHE_ITEMS", required = false, default_value = "100000")]
     cache_items: u64,
+    /// cache time to idle
+    #[arg(short, long, env = "CACHE_TIME_TO_IDLE", default_value = "6h", 
+        value_parser = |s: &str| s.parse::<humantime::Duration>().map(Into::<Duration>::into) )]
+    cache_time_to_idle: Duration,
 }
 
 #[tokio::main(flavor = "multi_thread", worker_threads = 2)]
@@ -58,6 +62,7 @@ async fn main_int(cfg: Args) -> anyhow::Result<()> {
     tracing::info!(version = env!("CARGO_APP_VERSION"));
     tracing::info!(port = cfg.port);
     tracing::info!(cache_items = cfg.cache_items);
+    tracing::info!(cache_time_to_idle = ?cfg.cache_time_to_idle);
 
     let cancel_token = CancellationToken::new();
 
@@ -110,7 +115,10 @@ async fn main_int(cfg: Args) -> anyhow::Result<()> {
         .layer((
             DefaultBodyLimit::max(1024 * 1024),
             TraceLayer::new_for_http(),
-            TimeoutLayer::with_status_code(http::StatusCode::REQUEST_TIMEOUT, Duration::from_secs(10)),
+            TimeoutLayer::with_status_code(
+                http::StatusCode::REQUEST_TIMEOUT,
+                Duration::from_secs(10),
+            ),
         ));
 
     let ct = cancel_token.clone();
@@ -143,9 +151,9 @@ async fn main_int(cfg: Args) -> anyhow::Result<()> {
         })
         .await?;
 
-    tracing::info!("service ended");    
+    tracing::info!("service ended");
     timer.await?;
-    tracing::debug!("metrics timer stopped");    
+    tracing::debug!("metrics timer stopped");
 
     tracing::info!("Bye");
     Ok(())
