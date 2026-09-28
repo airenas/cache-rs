@@ -44,6 +44,6 @@ WORKDIR /app
 COPY --from=salus /bin/salus /app/salus      
 COPY --from=builder /src/target/release/cache-rs /app/
 HEALTHCHECK --start-period=3s --interval=10s --timeout=3s --retries=3 \
-  CMD ["/app/salus", "http", "--addr", "127.0.0.1:8000"]
+  CMD ["/app/salus", "http", "--url", "http://127.0.0.1:8000/live"]
 
 ENTRYPOINT ["/app/cache-rs"]
