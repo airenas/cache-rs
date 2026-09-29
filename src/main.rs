@@ -123,7 +123,7 @@ async fn main_int(cfg: Args) -> anyhow::Result<()> {
 
     let ct = cancel_token.clone();
     let timer = tokio::task::spawn(async move {
-        let mut interval = time::interval(Duration::from_secs(5));
+        let mut interval = time::interval(Duration::from_secs(60));
         loop {
             tokio::select! {
                 _ = interval.tick() => {
