@@ -21,7 +21,7 @@ axum = { version = "0.8", features = ["macros", "http2"] }
 axum-server = { version = "0.8", features = ["tls-rustls"] }
 prometheus = "0.14"
 humantime = "2.4"
-mimalloc = "0.1.52"
+mimalloc = "0.1"
 
 
 [[bin]]
