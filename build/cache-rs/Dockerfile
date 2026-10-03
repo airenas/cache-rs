@@ -29,6 +29,7 @@ ARG BUILD_VERSION=0.1
 
 EXPOSE 8000
 
+ENV MALLOC_CONF="dirty_decay_ms:0,muzzy_decay_ms:0,background_thread:true"
 ENV RUST_LOG=info
 
 LABEL org.opencontainers.image.version=$BUILD_VERSION \
