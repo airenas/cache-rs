@@ -86,7 +86,7 @@ async fn main_int(cfg: Args) -> anyhow::Result<()> {
     let cache: Cache<String, String> = Cache::builder()
         .max_capacity(cfg.cache_items)
         .eviction_policy(EvictionPolicy::tiny_lfu())
-        .time_to_idle(Duration::from_secs(60 * 60 * 5)) // 5h
+        .time_to_idle(cfg.cache_time_to_idle) 
         .build();
 
     let metrics = Metrics::new()?;
